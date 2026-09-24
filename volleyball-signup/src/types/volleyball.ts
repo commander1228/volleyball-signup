@@ -11,7 +11,7 @@ export interface CreateGameRequest {
   opponent: string;
   court: number;
   gameTime: string;
-  gameDate: string;
+  gameDate: Date;
 }
 
 // POST /api/volleyball/player
@@ -33,7 +33,7 @@ export interface GameResponse {
   opponent: string;
   court: number;
   gameTime: string;
-  gameDate: string;
+  gameDate: Date;
 }
 
 // POST /api/volleyball/player response
@@ -57,6 +57,11 @@ export interface GameDetailsResponse {
   opponent: string;
   court: number;
   gameTime: string;
-  gameDate: string;
+  gameDate: Date;
   players: PlayerAttendanceResponse[];
+}
+
+export interface GameDateResponse {
+  gameId: number,
+  date: Date
 }
