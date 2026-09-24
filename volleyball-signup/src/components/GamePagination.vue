@@ -33,18 +33,16 @@ function formatGameDate(date: string) {
 </script>
 
 <template>
-  <nav class="overflow-x-hidden" aria-label="Game dates">
-    <div class="join">
+  <nav class="flex flex-wrap gap-2" aria-label="Game dates">
       <button
         v-for="game in games"
         :key="game.gameId"
-        class="btn join-item whitespace-nowrap"
+        class="btn whitespace-nowrap"
         :class="{ 'btn-primary': game.gameId === selectedGameId }"
         type="button"
         @click="emit('select', game.gameId)"
       >
         {{ formatGameDate(game.date) }}
       </button>
-    </div>
   </nav>
 </template>

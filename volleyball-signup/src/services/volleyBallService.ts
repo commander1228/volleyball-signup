@@ -20,5 +20,5 @@ export async function addPlayer(createPlayerRequest: CreatePlayerRequest) {
 }
 
 export async function changePlayerAttendance(updateAttendanceRequest: UpdateAttendanceRequest){
-    return putApi('/api/volleyball/player',updateAttendanceRequest); 
+    return putApi('/api/volleyball/attendance',updateAttendanceRequest); 
 }

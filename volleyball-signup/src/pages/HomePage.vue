@@ -14,7 +14,6 @@ const games = ref<GameDateResponse[]>([]);
 const isLoadingGames = ref(true);
 const gamesError = ref("");
 const selectedGame = ref<GameDetailsResponse | null>(null);
-const isLoadingDetails = ref(false);
 const detailsError = ref("");
 const isAddingPlayer = ref(false);
 const updatingAttendancePlayerId = ref<number | null>(null);
@@ -34,7 +33,6 @@ async function loadGames() {
 }
 
 async function loadGameDetails(gameId: number) {
-  isLoadingDetails.value = true;
   detailsError.value = "";
 
   try {
@@ -43,24 +41,16 @@ async function loadGameDetails(gameId: number) {
     selectedGame.value = null;
     detailsError.value =
       error instanceof Error ? error.message : "Unable to load game details. Please try again.";
-  } finally {
-    isLoadingDetails.value = false;
   }
 }
 
-async function addPlayerToGame() {
-  const name = window.prompt("Enter the player's name.");
-
-  if (name === null || !name.trim()) {
-    return;
-  }
-
+async function addPlayerToGame(name: string) {
   isAddingPlayer.value = true;
   detailsError.value = "";
 
   try {
     await addPlayer({
-      name: name.trim(),
+      name,
       gender: "MALE",
     });
 
@@ -120,9 +110,6 @@ onMounted(loadGames);
       <span>No games have been added yet.</span>
     </div>
 
-    <div v-if="isLoadingDetails" class="flex justify-center">
-      <span class="loading loading-spinner loading-md" aria-label="Loading game details"></span>
-    </div>
     <div v-if="detailsError" class="alert alert-error" role="alert">
       <span>{{ detailsError }}</span>
     </div>
