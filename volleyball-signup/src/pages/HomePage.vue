@@ -23,7 +23,9 @@ async function loadGames() {
   gamesError.value = "";
 
   try {
-    games.value = await getGameDates();
+    games.value = (await getGameDates()).sort((firstGame, secondGame) =>
+      firstGame.date.localeCompare(secondGame.date),
+    );
   } catch (error) {
     gamesError.value =
       error instanceof Error ? error.message : "Unable to load game dates. Please refresh the page.";

@@ -77,7 +77,6 @@ function submitPlayer() {
           <div class="card-body gap-1 p-4">
             <h3 class="font-semibold">{{ player.playerName }}</h3>
             <div class="flex items-center gap-2 text-sm">
-              <span>Attendance:</span>
               <span class="badge badge-sm" :class="attendanceBadgeClasses[player.attendanceStatus]">
                 {{ attendanceLabels[player.attendanceStatus] }}
               </span>

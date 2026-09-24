@@ -1,5 +1,15 @@
 const apiUrl = import.meta.env.VITE_API_URL
 
+async function readJsonResponse<T>(response: Response): Promise<T> {
+  const responseBody = await response.text()
+
+  if (!responseBody.trim()) {
+    return undefined as T
+  }
+
+  return JSON.parse(responseBody) as T
+}
+
 export async function getApi<T>(path: string): Promise<T> {
   const response = await fetch(`${apiUrl}${path}`)
 
@@ -7,7 +17,7 @@ export async function getApi<T>(path: string): Promise<T> {
     throw new Error(`Request failed: ${response.status}`)
   }
 
-  return response.json() as Promise<T>
+  return readJsonResponse<T>(response)
 }
 
 export async function postApi<TResponse, TBody>(
@@ -26,7 +36,7 @@ export async function postApi<TResponse, TBody>(
     throw new Error(`Request failed: ${response.status}`)
   }
 
-  return response.json() as Promise<TResponse>
+  return readJsonResponse<TResponse>(response)
 }
 
 export async function deleteApi<TResponse>(path: string): Promise<TResponse> {
@@ -38,7 +48,7 @@ export async function deleteApi<TResponse>(path: string): Promise<TResponse> {
     throw new Error(`Request failed: ${response.status}`)
   }
 
-  return response.json() as Promise<TResponse>
+  return readJsonResponse<TResponse>(response)
 }
 
 export async function putApi<TResponse,TBody>(
@@ -57,5 +67,5 @@ export async function putApi<TResponse,TBody>(
     throw new Error(`Request failed: ${response.status}`)
   }
 
-  return response.json() as Promise<TResponse>
+  return readJsonResponse<TResponse>(response)
 }
