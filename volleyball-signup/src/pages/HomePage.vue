@@ -2,8 +2,13 @@
 import { onMounted, ref } from "vue";
 import GameDetails from "@/components/GameDetails.vue";
 import GamePagination from "@/components/GamePagination.vue";
-import { getGameDates, getGameDetails } from "@/services/volleyBallService";
-import type { GameDateResponse, GameDetailsResponse } from "@/types/volleyball";
+import {
+  addPlayer,
+  changePlayerAttendance,
+  getGameDates,
+  getGameDetails,
+} from "@/services/volleyBallService";
+import type { Attendance, GameDateResponse, GameDetailsResponse } from "@/types/volleyball";
 
 const games = ref<GameDateResponse[]>([]);
 const isLoadingGames = ref(true);
@@ -11,6 +16,8 @@ const gamesError = ref("");
 const selectedGame = ref<GameDetailsResponse | null>(null);
 const isLoadingDetails = ref(false);
 const detailsError = ref("");
+const isAddingPlayer = ref(false);
+const updatingAttendancePlayerId = ref<number | null>(null);
 
 async function loadGames() {
   isLoadingGames.value = true;
@@ -41,6 +48,57 @@ async function loadGameDetails(gameId: number) {
   }
 }
 
+async function addPlayerToGame() {
+  const name = window.prompt("Enter the player's name.");
+
+  if (name === null || !name.trim()) {
+    return;
+  }
+
+  isAddingPlayer.value = true;
+  detailsError.value = "";
+
+  try {
+    await addPlayer({
+      name: name.trim(),
+      gender: "MALE",
+    });
+
+    if (selectedGame.value) {
+      await loadGameDetails(selectedGame.value.id);
+    }
+  } catch (error) {
+    detailsError.value =
+      error instanceof Error ? error.message : "Unable to add the player. Please try again.";
+  } finally {
+    isAddingPlayer.value = false;
+  }
+}
+
+async function updatePlayerAttendance(playerId: number, attendance: Attendance) {
+  if (!selectedGame.value) {
+    return;
+  }
+
+  const gameId = selectedGame.value.id;
+  updatingAttendancePlayerId.value = playerId;
+  detailsError.value = "";
+
+  try {
+    await changePlayerAttendance({
+      attendance,
+      playerId,
+      gameId,
+    });
+    await loadGameDetails(gameId);
+  } catch (error) {
+    detailsError.value =
+      error instanceof Error ? error.message : "Unable to update attendance. Please try again.";
+  } finally {
+    updatingAttendancePlayerId.value = null;
+  }
+}
+
 onMounted(loadGames);
 </script>
 
@@ -65,9 +123,16 @@ onMounted(loadGames);
     <div v-if="isLoadingDetails" class="flex justify-center">
       <span class="loading loading-spinner loading-md" aria-label="Loading game details"></span>
     </div>
-    <div v-else-if="detailsError" class="alert alert-error" role="alert">
+    <div v-if="detailsError" class="alert alert-error" role="alert">
       <span>{{ detailsError }}</span>
     </div>
-    <GameDetails v-else-if="selectedGame" :game="selectedGame" />
+    <GameDetails
+      v-if="selectedGame"
+      :game="selectedGame"
+      :is-adding-player="isAddingPlayer"
+      :updating-attendance-player-id="updatingAttendancePlayerId"
+      @add-player="addPlayerToGame"
+      @change-attendance="updatePlayerAttendance"
+    />
   </section>
 </template>

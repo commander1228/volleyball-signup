@@ -33,7 +33,7 @@ function formatGameDate(date: string) {
 </script>
 
 <template>
-  <nav class="overflow-x-auto" aria-label="Game dates">
+  <nav class="overflow-x-hidden" aria-label="Game dates">
     <div class="join">
       <button
         v-for="game in games"
