@@ -1,4 +1,4 @@
-import type { CreateGameRequest, GameDateResponse } from "@/types/volleyball";
+import type { CreateGameRequest, GameDateResponse, GameDetailsResponse } from "@/types/volleyball";
 import { getApi, postApi } from "./api";
 
 export async function createGame(createGameRequest: CreateGameRequest){
@@ -9,4 +9,8 @@ export async function createGame(createGameRequest: CreateGameRequest){
 export async function getGameDates(): Promise<GameDateResponse[]>{
     const result = await getApi<GameDateResponse[]>('/api/volleyball/game');
     return result;
+}
+
+export async function getGameDetails(gameId: number): Promise<GameDetailsResponse> {
+    return getApi<GameDetailsResponse>(`/api/volleyball/game/${gameId}`);
 }

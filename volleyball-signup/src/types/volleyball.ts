@@ -63,5 +63,5 @@ export interface GameDetailsResponse {
 
 export interface GameDateResponse {
   gameId: number,
-  date: Date
+  date: string
 }
