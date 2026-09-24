@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "cd Vue-Project-Template && npm ci",
-  "buildCommand": "cd Vue-Project-Template && npm run build",
-  "outputDirectory": "Vue-Project-Template/dist",
+  "installCommand": "cd volleyball-signup && npm ci",
+  "buildCommand": "cd volleyball-signup && npm run build",
+  "outputDirectory": "volleyball-signup/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
