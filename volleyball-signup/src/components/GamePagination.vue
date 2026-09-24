@@ -33,11 +33,11 @@ function formatGameDate(date: string) {
 </script>
 
 <template>
-  <nav class="flex flex-wrap gap-2" aria-label="Game dates">
+  <nav class="grid grid-cols-[repeat(auto-fit,minmax(4.5rem,1fr))] gap-2" aria-label="Game dates">
       <button
         v-for="game in games"
         :key="game.gameId"
-        class="btn whitespace-nowrap"
+        class="btn w-full whitespace-nowrap"
         :class="{ 'btn-primary': game.gameId === selectedGameId }"
         type="button"
         @click="emit('select', game.gameId)"

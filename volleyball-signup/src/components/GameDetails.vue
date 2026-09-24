@@ -38,6 +38,20 @@ function changeAttendance(event: Event, playerId: number) {
   }
 }
 
+function formatGameTime(time: string) {
+  const [hourValue, minuteValue] = time.split(":");
+  const hours = Number(hourValue);
+
+  if (hourValue === undefined || minuteValue === undefined || Number.isNaN(hours)) {
+    return time;
+  }
+
+  const period = hours >= 12 ? "PM" : "AM";
+  const displayHour = hours % 12 || 12;
+
+  return `${displayHour}:${minuteValue} ${period}`;
+}
+
 function submitPlayer() {
   const name = playerName.value.trim();
 
@@ -62,7 +76,7 @@ function submitPlayer() {
         </div>
         <div>
           <dt class="text-sm text-base-content/70">Time</dt>
-          <dd class="font-semibold">{{ game.gameTime }}</dd>
+          <dd class="font-semibold">{{ formatGameTime(game.gameTime) }}</dd>
         </div>
         <div>
           <dt class="text-sm text-base-content/70">Court</dt>
